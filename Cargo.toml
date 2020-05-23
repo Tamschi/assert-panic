@@ -1,5 +1,12 @@
 [package]
 name = "assert-panic"
-version = "0.0.0"
+version = "1.0.0-preview-1" # Also update README.md (in multiple places) and html_root_url.
 authors = ["Tamme Schichler <tamme@schichler.dev>"]
 edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "Assert that a panic happens, and optionally what (kind of) panic happens"
+repository = "https://github.com/Tamschi/assert-panic"
+documentation = "https://docs.rs/assert-panic"
+readme = "README.md"
+keywords = ["assert", "panic"]
+categories = ["development-tools::testing"]

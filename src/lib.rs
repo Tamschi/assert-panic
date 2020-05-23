@@ -1,8 +1,10 @@
 //! Assert that a panic happens, and optionally what (kind of) panic happens.
 
-//TODO: clippy::cargo
+#![doc(html_root_url = "https://docs.rs/assert-panic/1.0.0-preview-1")]
+
 #![warn(
     clippy::as_conversions,
+    clippy::cargo,
     clippy::clone_on_ref_ptr,
     clippy::missing_docs_in_private_items,
     clippy::pedantic
