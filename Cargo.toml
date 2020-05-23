@@ -12,5 +12,8 @@ keywords = ["assert", "panic"]
 categories = ["development-tools::testing"]
 include = ["/LICENSE*", "README.md", "/src/**.rs", "/tests/**.rs"]
 
+[features]
+silent = []
+
 [dev-dependencies]
 version-sync = "0.9"

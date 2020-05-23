@@ -7,6 +7,12 @@ This library provides a macro that asserts that a panic happens, and optionally 
 
 The simplest version gives you the panic as boxed `Any`.
 
+## Features
+
+### `"silent"`
+
+**Globally** disable the current panic hook while executing `$stmt`. Recommended for use in tests.
+
 ## Example
 
 ```rust

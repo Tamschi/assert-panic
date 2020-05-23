@@ -1,4 +1,10 @@
 //! Assert that a panic happens, and optionally what (kind of) panic happens.
+//!
+//! # Features
+//!
+//!  ## `"silent"`
+//!
+//!  **Globally** disable the current panic hook while executing `$stmt`. Recommended for use in tests.
 
 #![doc(html_root_url = "https://docs.rs/assert-panic/1.0.0-preview.1")]
 #![doc(test(no_crate_inject))]
@@ -23,6 +29,9 @@
 ///
 /// Optionally asserts the type of the panic.  
 /// Optionally asserts a panic text start, or a given panic value.
+///
+/// The current panic hook is disabled during `$stmt` if the crate is compiled with the `"silent"` feature. This is recommended for use in tests.
+/// TODO: This is **not** properly synchronised as of right now.
 ///
 /// # Panics
 ///
@@ -72,10 +81,17 @@
 /// ```
 #[macro_export]
 macro_rules! assert_panic {
-    ($stmt:stmt$(,)?) => {
-        ::std::panic::catch_unwind(|| -> () { $stmt })
-            .expect_err("assert_panic! argument did not panic")
-    };
+    ($stmt:stmt$(,)?) => {{
+        //SEE: https://stackoverflow.com/a/59211519/410020
+        #[cfg(feature = "silent")]
+        let prev_hook = ::std::panic::take_hook();
+        #[cfg(feature = "silent")]
+        ::std::panic::set_hook(Box::new(|_| ()));
+        let result = ::std::panic::catch_unwind(|| -> () { $stmt });
+        #[cfg(feature = "silent")]
+        ::std::panic::set_hook(prev_hook);
+        result.expect_err("assert_panic! argument did not panic")
+    }};
 
     ($stmt:stmt, $ty:ty$(,)?) => {{
         let panic = $crate::assert_panic!($stmt);
