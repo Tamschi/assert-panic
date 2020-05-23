@@ -17,6 +17,8 @@
     clippy::unimplemented
 )]
 
+#![doc(test(no_crate_inject))]
+
 /// Asserts that `$stmt` panics.  
 /// Optionally asserts the type of the panic.  
 /// Optionally asserts a panic text start, or a given panic value.
