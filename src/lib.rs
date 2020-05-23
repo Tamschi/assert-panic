@@ -1,6 +1,29 @@
-/// Panics if `$stmt` doesn't panic.  
+//! Assert that a panic happens, and optionally what (kind of) panic happens.
+
+//TODO: clippy::cargo
+#![warn(
+    clippy::as_conversions,
+    clippy::clone_on_ref_ptr,
+    clippy::missing_docs_in_private_items,
+    clippy::pedantic
+)]
+// Debug cleanup. Uncomment before committing.
+#![forbid(
+    clippy::dbg_macro,
+    clippy::print_stdout,
+    clippy::todo,
+    clippy::unimplemented
+)]
+
+/// Asserts that `$stmt` panics.  
 /// Optionally asserts the type of the panic.  
 /// Optionally asserts a panic text start, or a given panic value.
+///
+/// # Panics
+///
+/// - if $stmt doesn't panic.
+/// - optionally if the type of the panic doesn't match.
+/// - optionally if the panic text starts in the wrong way, or the panic has the wrong value.
 ///
 /// # Example
 ///
@@ -21,7 +44,6 @@
 ///     "Expected 2 but found 1"
 /// );
 /// ```
-
 #[macro_export]
 macro_rules! assert_panic {
     ($stmt:stmt$(,)?) => {
