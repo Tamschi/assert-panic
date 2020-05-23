@@ -1,6 +1,6 @@
 //! Assert that a panic happens, and optionally what (kind of) panic happens.
 
-#![doc(html_root_url = "https://docs.rs/assert-panic/1.0.0-preview-1")]
+#![doc(html_root_url = "https://docs.rs/assert-panic/1.0.0-preview1")]
 
 #![warn(
     clippy::as_conversions,

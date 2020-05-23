@@ -1,6 +1,6 @@
 [package]
 name = "assert-panic"
-version = "1.0.0-preview-1" # Also update README.md (in multiple places) and html_root_url.
+version = "1.0.0-preview1" # Also update README.md (in multiple places) and html_root_url.
 authors = ["Tamme Schichler <tamme@schichler.dev>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
@@ -11,3 +11,6 @@ readme = "README.md"
 keywords = ["assert", "panic"]
 categories = ["development-tools::testing"]
 include = ["/src/**.rs", "/LICENSE*", "README.md"]
+
+[dev-dependencies]
+version-sync = "0.9"
