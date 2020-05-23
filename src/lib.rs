@@ -1,7 +1,7 @@
 //! Assert that a panic happens, and optionally what (kind of) panic happens.
 
 #![doc(html_root_url = "https://docs.rs/assert-panic/1.0.0-preview1")]
-
+#![doc(test(no_crate_inject))]
 #![warn(
     clippy::as_conversions,
     clippy::cargo,
@@ -17,15 +17,16 @@
     clippy::unimplemented
 )]
 
-#![doc(test(no_crate_inject))]
-
 /// Asserts that `$stmt` panics.  
+///
+/// - Only this base form with a single expression returns the panic.
+///
 /// Optionally asserts the type of the panic.  
 /// Optionally asserts a panic text start, or a given panic value.
 ///
 /// # Panics
 ///
-/// - if $stmt doesn't panic.
+/// - if `$stmt` doesn't panic.
 /// - optionally if the type of the panic doesn't match.
 /// - optionally if the panic text starts in the wrong way, or the panic has the wrong value.
 ///
@@ -35,17 +36,31 @@
 /// # use std::any::Any;
 /// use assert_panic::assert_panic;
 ///
-/// let _: Box<dyn Any + Send + 'static> = assert_panic!(panic!("at the Disco"));
-/// let _: () = assert_panic!(panic!("at the Disco"), &str);
-/// let _: () = assert_panic!({ assert_panic!({}); }, String, starts with "assert_panic! argument did not panic:");
-/// let _: () = assert_panic!(
+/// let _: Box<dyn Any + Send + 'static> =
+///     assert_panic!(panic!("at the Disco"));
+///
+/// # let _: () =
+/// assert_panic!(panic!("at the Disco"), &str);
+///
+/// # let _: () =
+/// assert_panic!(
+///     { assert_panic!({}); },
+///     String,
+///     starts with "assert_panic! argument did not panic:",
+/// );
+///
+/// # let _: () =
+/// assert_panic!(
 ///     assert_panic!(panic!("found"), &str, starts with "expected"),
 ///     String,
-///     "Expected a panic starting with \"expected\" but found \"found\"");
-/// let _: () = assert_panic!(
+///     "Expected a panic starting with \"expected\" but found \"found\"",
+/// );
+///
+/// # let _: () =
+/// assert_panic!(
 ///     assert_panic!(panic!(1usize), usize, 2usize),
 ///     String,
-///     "Expected 2 but found 1"
+///     "Expected 2 but found 1",
 /// );
 /// ```
 #[macro_export]
