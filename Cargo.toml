@@ -10,3 +10,4 @@ documentation = "https://docs.rs/assert-panic"
 readme = "README.md"
 keywords = ["assert", "panic"]
 categories = ["development-tools::testing"]
+include = ["/src/**.rs", "/LICENSE*", "README.md"]
