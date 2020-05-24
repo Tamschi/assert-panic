@@ -1,7 +1,7 @@
 # assert-panic
 
 [![Latest Version](https://img.shields.io/crates/v/assert-panic.svg)](https://crates.io/crates/assert-panic)
-[![docs.rs](https://docs.rs/assert-panic/badge.svg?version=1.0.0-preview1)](https://docs.rs/assert-panic/1.0.0-preview1/assert_panic/macro.assert_panic.html)
+[![docs.rs](https://docs.rs/assert-panic/badge.svg?version=1.0.0-preview.1)](https://docs.rs/assert-panic/1.0.0-preview.1/assert_panic/macro.assert_panic.html)
 
 This library provides a macro that asserts that a panic happens, and optionally what (kind of) panic happens.
 
@@ -42,3 +42,14 @@ assert_panic!(
     "Expected 2 but found 1",
 );
 ```
+
+## Versioning
+
+`assert-panic` strictly follows [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) with the following exceptions:
+
+- The minor version will not reset to 0 on major version changes.  
+Consider it the global feature level.
+- The patch version will not reset to 0 on major or minor version changes.  
+Consider it the global patch level.
+- Panic messages originating from `assert-panic` are considered an implementation detail.  
+Please only evaluate panic values you have direct control over.
