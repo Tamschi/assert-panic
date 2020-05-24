@@ -24,6 +24,10 @@
 /// Optionally asserts the type of the panic.  
 /// Optionally asserts a panic text start, or a given panic value.
 ///
+/// All arguments are evaluated at most once, but `$expr` must be `Copy`.
+///
+/// `$expr` is only evaluated if `$stmt` panics.
+///
 /// # Panics
 ///
 /// - if `$stmt` doesn't panic.
@@ -53,7 +57,14 @@
 /// assert_panic!(
 ///     assert_panic!(panic!("at the Disco"), String),
 ///     String,
-///     starts with "Expected a `String` panic but found something with TypeId { t: ",
+///     starts with "Expected a `String` panic but found one with TypeId { t: ",
+/// );
+///
+/// # let _: () =
+/// assert_panic!(
+///     assert_panic!(panic!("found"), &str, contains "expected"),
+///     String,
+///     "Expected a panic containing \"expected\" but found \"found\"",
 /// );
 ///
 /// # let _: () =
@@ -67,7 +78,7 @@
 /// assert_panic!(
 ///     assert_panic!(panic!(1usize), usize, 2usize),
 ///     String,
-///     "Expected 2 but found 1",
+///     "Expected a panic equal to 2 but found 1",
 /// );
 /// ```
 #[macro_export]
@@ -81,44 +92,62 @@ macro_rules! assert_panic {
         let panic = $crate::assert_panic!($stmt);
         panic.downcast_ref::<$ty>().unwrap_or_else(|| {
             panic!(
-                "Expected a `{}` panic but found something with {:?}",
+                "Expected a `{}` panic but found one with {:?}",
                 stringify!($ty),
                 panic.type_id()
             )
         });
     }};
 
-    ($stmt:stmt, $ty:ty, starts with $expr:expr$(,)?) => {{
+    ($stmt:stmt, $ty:ty, contains $expr:expr$(,)?) => {{
         let panic = $crate::assert_panic!($stmt);
+        let expr = $expr;
         let panic = panic.downcast_ref::<$ty>().unwrap_or_else(|| {
             panic!(
-                "Expected a `{}` panic but found something with {:?}",
+                "Expected a `{}` panic containing {:?} but found one with {:?}",
                 stringify!($ty),
+                expr,
                 panic.type_id()
             )
         });
         assert!(
-            panic.starts_with($expr),
+            panic.contains(expr),
+            "Expected a panic containing {:?} but found {:?}",
+            expr,
+            panic
+        );
+    }};
+
+    ($stmt:stmt, $ty:ty, starts with $expr:expr$(,)?) => {{
+        let panic = $crate::assert_panic!($stmt);
+        let expr = $expr;
+        let panic = panic.downcast_ref::<$ty>().unwrap_or_else(|| {
+            panic!(
+                "Expected a `{}` panic starting with {:?} but found one with {:?}",
+                stringify!($ty),
+                expr,
+                panic.type_id()
+            )
+        });
+        assert!(
+            panic.starts_with(expr),
             "Expected a panic starting with {:?} but found {:?}",
-            $expr,
+            expr,
             panic
         );
     }};
 
     ($stmt:stmt, $ty:ty, $expr:expr$(,)?) => {{
         let panic = $crate::assert_panic!($stmt);
+        let expr = $expr;
         let panic = panic.downcast_ref::<$ty>().unwrap_or_else(|| {
             panic!(
-                "Expected a `{}` panic but found something with {:?}",
+                "Expected a `{}` panic equal to {:?} but found one with {:?}",
                 stringify!($ty),
+                expr,
                 panic.type_id()
             )
         });
-        assert!(
-            *panic == $expr,
-            "Expected {:?} but found {:?}",
-            $expr,
-            panic
-        );
+        assert!(*panic == expr, "Expected a panic equal to {:?} but found {:?}", expr, panic);
     }};
 }

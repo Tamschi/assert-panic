@@ -27,7 +27,13 @@ assert_panic!(
 assert_panic!(
     assert_panic!(panic!("at the Disco"), String),
     String,
-    starts with "Expected a `String` panic but found something with TypeId { t: ",
+    starts with "Expected a `String` panic but found one with TypeId { t: ",
+);
+
+assert_panic!(
+    assert_panic!(panic!("found"), &str, contains "expected"),
+    String,
+    "Expected a panic containing \"expected\" but found \"found\"",
 );
 
 assert_panic!(
@@ -39,7 +45,7 @@ assert_panic!(
 assert_panic!(
     assert_panic!(panic!(1usize), usize, 2usize),
     String,
-    "Expected 2 but found 1",
+    "Expected a panic equal to 2 but found 1",
 );
 ```
 
