@@ -21,18 +21,15 @@
 ///
 /// - Only this base form with a single expression returns the panic.
 ///
-/// Optionally asserts the type of the panic.  
-/// Optionally asserts a panic text start, or a given panic value.
+/// Optionally asserts the type of the panic.
 ///
-/// All arguments are evaluated at most once, but `$expr` must be `Copy`.
-///
-/// `$expr` is only evaluated if `$stmt` panics.
+/// Optionally asserts the downcast panic `contains`, `starts with` or equals a given expression `$expr`.
 ///
 /// # Panics
 ///
 /// - if `$stmt` doesn't panic.
 /// - optionally if the type of the panic doesn't match.
-/// - optionally if the panic text starts in the wrong way, or the panic has the wrong value.
+/// - optionally if the panic has the wrong value.
 ///
 /// # Example
 ///
@@ -81,6 +78,22 @@
 ///     "Expected a panic equal to 2 but found 1",
 /// );
 /// ```
+/// 
+/// # Details
+///
+/// All arguments are evaluated at most once, but `$expr` must be [`Copy`](https://doc.rust-lang.org/stable/std/marker/trait.Copy.html).
+///
+/// `$expr` is only evaluated if `$stmt` panics.
+/// 
+/// Type assertions use [`Any::downcast_ref::<$ty>()`](https://doc.rust-lang.org/stable/std/any/trait.Any.html#method.downcast_ref-1).
+///
+/// The value is examined by reference `panic` only after downcasting it to `$ty`:
+///
+/// - `contains` uses `panic.contains(expr)`.  
+/// - `starts with` uses `panic.starts_with(expr)`.  
+/// - Equality comparison is done with `*panic == expr`.
+///
+/// All of this is duck-typed, so the respective forms on require that matching methods / the matching operator are present.
 #[macro_export]
 macro_rules! assert_panic {
     ($stmt:stmt$(,)?) => {
