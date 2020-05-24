@@ -4,7 +4,7 @@
 //!
 //!  ## `"silent"`
 //!
-//!  **Globally** disable the current panic hook while executing `$stmt`. Recommended for use in tests.
+//!  **Globally** disable the current panic hook while executing `$stmt`. *This is not deterministic if anything else manipulates the panic hook from another thread!* Recommended for use in tests.
 
 #![doc(html_root_url = "https://docs.rs/assert-panic/1.0.0-preview.1")]
 #![doc(test(no_crate_inject))]
@@ -23,6 +23,13 @@
     clippy::unimplemented
 )]
 
+#[cfg(feature = "silent")]
+use static_locks::ReentrantMutex;
+
+#[cfg(feature = "silent")]
+#[doc(hidden)]
+pub static HOOK_LOCK: ReentrantMutex<()> = ReentrantMutex::new(());
+
 /// Asserts that `$stmt` panics.  
 ///
 /// - Only this base form with a single expression returns the panic.
@@ -30,8 +37,7 @@
 /// Optionally asserts the type of the panic.  
 /// Optionally asserts a panic text start, or a given panic value.
 ///
-/// The current panic hook is disabled during `$stmt` if the crate is compiled with the `"silent"` feature. This is recommended for use in tests.
-/// TODO: This is **not** properly synchronised as of right now.
+/// The current panic hook is disabled during `$stmt` if the crate is compiled with the `"silent"` feature. *This is not deterministic if anything else manipulates the panic hook from another thread!* Recommended for use in tests.
 ///
 /// # Panics
 ///
@@ -82,14 +88,23 @@
 #[macro_export]
 macro_rules! assert_panic {
     ($stmt:stmt$(,)?) => {{
-        //SEE: https://stackoverflow.com/a/59211519/410020
         #[cfg(feature = "silent")]
-        let prev_hook = ::std::panic::take_hook();
-        #[cfg(feature = "silent")]
-        ::std::panic::set_hook(Box::new(|_| ()));
+        let (hook_guard, prev_hook) = {
+            let hook_guard = $crate::HOOK_LOCK.lock();
+            //SEE: https://stackoverflow.com/a/59211519/410020
+            let prev_hook = ::std::panic::take_hook();
+            ::std::panic::set_hook(Box::new(|_| ()));
+            (hook_guard, prev_hook)
+        };
+
         let result = ::std::panic::catch_unwind(|| -> () { $stmt });
+
         #[cfg(feature = "silent")]
-        ::std::panic::set_hook(prev_hook);
+        {
+            ::std::panic::set_hook(prev_hook);
+            drop(hook_guard);
+        }
+
         result.expect_err("assert_panic! argument did not panic")
     }};
 

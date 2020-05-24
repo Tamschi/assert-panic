@@ -11,7 +11,7 @@ The simplest version gives you the panic as boxed `Any`.
 
 ### `"silent"`
 
-**Globally** disable the current panic hook while executing `$stmt`. Recommended for use in tests.
+**Globally** disable the current panic hook while executing `$stmt`. *This is not deterministic if anything else manipulates the panic hook from another thread!* Recommended for use in tests.
 
 ## Example
 
