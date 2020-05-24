@@ -10,6 +10,13 @@ fn no_panic() {
 #[test]
 #[should_panic]
 #[allow(clippy::let_unit_value)]
+fn wrong_type() {
+    let _: () = assert_panic!(panic!("at the Disco"), String);
+}
+
+#[test]
+#[should_panic]
+#[allow(clippy::let_unit_value)]
 fn wrong_text() {
     let _: () = assert_panic!(panic!("at the Disco"), &str, "at");
 }

@@ -51,6 +51,13 @@
 ///
 /// # let _: () =
 /// assert_panic!(
+///     assert_panic!(panic!("at the Disco"), String),
+///     String,
+///     starts with "Expected a `String` panic but found something with TypeId { t: ",
+/// );
+///
+/// # let _: () =
+/// assert_panic!(
 ///     assert_panic!(panic!("found"), &str, starts with "expected"),
 ///     String,
 ///     "Expected a panic starting with \"expected\" but found \"found\"",
@@ -74,7 +81,7 @@ macro_rules! assert_panic {
         let panic = $crate::assert_panic!($stmt);
         panic.downcast_ref::<$ty>().unwrap_or_else(|| {
             panic!(
-                "Expected a `{}` panic but found something with TypeId {:?}",
+                "Expected a `{}` panic but found something with {:?}",
                 stringify!($ty),
                 panic.type_id()
             )
@@ -85,7 +92,7 @@ macro_rules! assert_panic {
         let panic = $crate::assert_panic!($stmt);
         let panic = panic.downcast_ref::<$ty>().unwrap_or_else(|| {
             panic!(
-                "Expected a `{}` panic but found something with TypeId {:?}",
+                "Expected a `{}` panic but found something with {:?}",
                 stringify!($ty),
                 panic.type_id()
             )
@@ -102,7 +109,7 @@ macro_rules! assert_panic {
         let panic = $crate::assert_panic!($stmt);
         let panic = panic.downcast_ref::<$ty>().unwrap_or_else(|| {
             panic!(
-                "Expected a `{}` panic but found something with TypeId {:?}",
+                "Expected a `{}` panic but found something with {:?}",
                 stringify!($ty),
                 panic.type_id()
             )
