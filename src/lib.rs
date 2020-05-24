@@ -73,7 +73,7 @@
 ///
 /// # let _: () =
 /// assert_panic!(
-///     assert_panic!(panic!(1usize), usize, 2usize),
+///     assert_panic!(panic!(1_usize), usize, 2_usize),
 ///     String,
 ///     "Expected a panic equal to 2 but found 1",
 /// );
