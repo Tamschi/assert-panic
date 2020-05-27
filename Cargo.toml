@@ -10,7 +10,7 @@ documentation = "https://docs.rs/assert-panic/1.0.0-preview.1/assert-panic/macro
 readme = "README.md"
 keywords = ["assert", "panic"]
 categories = ["development-tools::testing"]
-include = ["/LICENSE*", "README.md", "/src/**.rs", "/tests/**.rs"]
+include = ["/LICENSE*", "/README.md", "/src/**.rs", "/tests/**.rs"]
 
 [dev-dependencies]
 version-sync = "0.9"
