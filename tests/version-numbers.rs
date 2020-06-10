@@ -1,9 +1,21 @@
+use version_sync::*;
+
 #[test]
-fn test_readme_deps() {
-    version_sync::assert_markdown_deps_updated!("README.md");
+fn readme_deps() {
+    assert_markdown_deps_updated!("README.md");
 }
 
 #[test]
-fn test_html_root_url() {
-    version_sync::assert_html_root_url_updated!("src/lib.rs");
+fn html_root_url() {
+    assert_html_root_url_updated!("src/lib.rs");
+}
+
+#[test]
+fn readme_versions() {
+    assert_contains_regex!("README.md", "\\[!\\[docs.rs]\\(https://docs.rs/assert-panic/badge.svg\\?version={version}\\)\\]\\(https://docs.rs/assert-panic/{version}/assert_panic/macro.assert_panic.html\\)");
+}
+
+#[test]
+fn changelog_contains_version() {
+    assert_contains_regex!("CHANGELOG.md", "`{version}`");
 }

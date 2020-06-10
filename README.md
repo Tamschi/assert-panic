@@ -1,7 +1,7 @@
 # assert-panic
 
 [![Latest Version](https://img.shields.io/crates/v/assert-panic.svg)](https://crates.io/crates/assert-panic)
-[![docs.rs](https://docs.rs/assert-panic/badge.svg?version=1.0.0-preview.1)](https://docs.rs/assert-panic/1.0.0-preview.1/assert_panic/macro.assert_panic.html)
+[![docs.rs](https://docs.rs/assert-panic/badge.svg?version=1.0.0)](https://docs.rs/assert-panic/1.0.0/assert_panic/macro.assert_panic.html)
 
 This library provides a macro that asserts that a panic happens, and optionally what (kind of) panic happens.
 
