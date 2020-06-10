@@ -11,6 +11,11 @@ fn html_root_url() {
 }
 
 #[test]
+fn cargo_versions() {
+    assert_contains_regex!("Cargo.toml", "^documentation = \"https://docs\\.rs/assert-panic/{version}/assert-panic/macro\\.assert_panic\\.html\"$");
+}
+
+#[test]
 fn readme_versions() {
     assert_contains_regex!("README.md", "\\[!\\[docs.rs]\\(https://docs.rs/assert-panic/badge.svg\\?version={version}\\)\\]\\(https://docs.rs/assert-panic/{version}/assert_panic/macro.assert_panic.html\\)");
 }

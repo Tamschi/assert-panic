@@ -1,6 +1,6 @@
 //! Assert that a panic happens, and optionally what (kind of) panic happens.
 
-#![doc(html_root_url = "https://docs.rs/assert-panic/1.0.0")]
+#![doc(html_root_url = "https://docs.rs/assert-panic/1.0.1")]
 #![doc(test(no_crate_inject))]
 #![warn(
     clippy::as_conversions,
@@ -78,13 +78,13 @@
 ///     "Expected a panic equal to 2 but found 1",
 /// );
 /// ```
-/// 
+///
 /// # Details
 ///
 /// All arguments are evaluated at most once, but `$expr` must be [`Copy`](https://doc.rust-lang.org/stable/std/marker/trait.Copy.html).
 ///
 /// `$expr` is only evaluated if `$stmt` panics.
-/// 
+///
 /// Type assertions use [`Any::downcast_ref::<$ty>()`](https://doc.rust-lang.org/stable/std/any/trait.Any.html#method.downcast_ref-1).
 ///
 /// The value is examined by reference `panic` only after downcasting it to `$ty`:
@@ -93,7 +93,7 @@
 /// - `starts with` uses `panic.starts_with(expr)`.  
 /// - Equality comparison is done with `*panic == expr`.
 ///
-/// All of this is duck-typed, so the respective forms on require that matching methods / the matching operator are present.
+/// All of this is duck-typed, so the respective forms only require that matching methods / the matching operator are present.
 #[macro_export]
 macro_rules! assert_panic {
     ($stmt:stmt$(,)?) => {
@@ -161,6 +161,11 @@ macro_rules! assert_panic {
                 panic.type_id()
             )
         });
-        assert!(*panic == expr, "Expected a panic equal to {:?} but found {:?}", expr, panic);
+        assert!(
+            *panic == expr,
+            "Expected a panic equal to {:?} but found {:?}",
+            expr,
+            panic
+        );
     }};
 }
